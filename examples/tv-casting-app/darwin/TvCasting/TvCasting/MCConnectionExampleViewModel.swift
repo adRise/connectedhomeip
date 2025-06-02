@@ -155,13 +155,13 @@ class MCConnectionExampleViewModel: ObservableObject {
         if useCommissionerGeneratedPasscode {
             identificationDeclarationOptions = MCIdentificationDeclarationOptions(commissionerPasscodeOnly: true)
             connectionCallbacks = MCConnectionCallbacks(
-                callbacks: connectionCompleteCallback,
+                connectionCompleteCallback: connectionCompleteCallback,
                 commissionerDeclarationCallback: commissionerDeclarationCallback
             )
         } else {
             identificationDeclarationOptions = MCIdentificationDeclarationOptions()
             connectionCallbacks = MCConnectionCallbacks(
-                callbacks: connectionCompleteCallback,
+                connectionCompleteCallback: connectionCompleteCallback,
                 commissionerDeclarationCallback: commissionerDeclarationCallback
             )
         }
