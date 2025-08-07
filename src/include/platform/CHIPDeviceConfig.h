@@ -214,7 +214,7 @@
  * (see src/credentials/examples/DeviceAttestationCredsExample.cpp).
  */
 #ifndef CHIP_DEVICE_CONFIG_DEVICE_VENDOR_ID
-#define CHIP_DEVICE_CONFIG_DEVICE_VENDOR_ID 0xFFF1
+#define CHIP_DEVICE_CONFIG_DEVICE_VENDOR_ID 0x15D5
 #endif
 
 /**
@@ -237,7 +237,7 @@
  * (see src/credentials/examples/DeviceAttestationCredsExample.cpp)
  */
 #ifndef CHIP_DEVICE_CONFIG_DEVICE_PRODUCT_ID
-#define CHIP_DEVICE_CONFIG_DEVICE_PRODUCT_ID 0x8001
+#define CHIP_DEVICE_CONFIG_DEVICE_PRODUCT_ID 0x15D5
 #endif
 
 /**
