@@ -28,75 +28,38 @@ namespace ClosureDimension {
 /**
  * Structure represents the current state struct of a closure dimension cluster derivation instance.
  */
-struct GenericCurrentStateStruct : public Structs::CurrentStruct::Type
+struct GenericDimensionStateStruct : public Structs::DimensionStateStruct::Type
 {
-    GenericCurrentStateStruct(Optional<Percent100ths> positionValue            = NullOptional,
-                              Optional<LatchingEnum> latchingValue             = NullOptional,
-                              Optional<Globals::ThreeLevelAutoEnum> speedValue = NullOptional)
-    {
-        Set(positionValue, latchingValue, speedValue);
-    }
-
-    GenericCurrentStateStruct(const GenericCurrentStateStruct & currentState) { *this = currentState; }
-
-    GenericCurrentStateStruct & operator=(const GenericCurrentStateStruct & current)
-    {
-        Set(current.position, current.latching, current.speed);
-        return *this;
-    }
-
-    void Set(Optional<Percent100ths> positioningValue = NullOptional, Optional<LatchingEnum> latchingValue = NullOptional,
-             Optional<Globals::ThreeLevelAutoEnum> speedValue = NullOptional)
-    {
-        position = positioningValue;
-        latching = latchingValue;
-        speed    = speedValue;
-    }
-
-    bool operator==(const GenericCurrentStateStruct & rhs) const
-    {
-        return position == rhs.position && latching == rhs.latching && speed == rhs.speed;
-    }
-
-    bool operator!=(const GenericCurrentStateStruct & rhs) const
-    {
-        return position != rhs.position || latching != rhs.latching || speed != rhs.speed;
-    }
-};
-
-/**
- * Structure represents the target struct of a closure dimension cluster derivation instance.
- */
-struct GenericTargetStruct : public Structs::TargetStruct::Type
-{
-    GenericTargetStruct(Optional<Percent100ths> positionValue = NullOptional, Optional<TargetLatchEnum> latchValue = NullOptional,
-                        Optional<Globals::ThreeLevelAutoEnum> speedValue = NullOptional)
+    GenericDimensionStateStruct(Optional<DataModel::Nullable<chip::Percent100ths>> positionValue = NullOptional,
+                                Optional<DataModel::Nullable<bool>> latchValue                   = NullOptional,
+                                Optional<Globals::ThreeLevelAutoEnum> speedValue                 = NullOptional)
     {
         Set(positionValue, latchValue, speedValue);
     }
 
-    GenericTargetStruct(const GenericTargetStruct & target) { *this = target; }
+    GenericDimensionStateStruct(const GenericDimensionStateStruct & currentState) { *this = currentState; }
 
-    GenericTargetStruct & operator=(const GenericTargetStruct & target)
+    GenericDimensionStateStruct & operator=(const GenericDimensionStateStruct & current)
     {
-        Set(target.position, target.latch, target.speed);
+        Set(current.position, current.latch, current.speed);
         return *this;
     }
 
-    void Set(Optional<Percent100ths> positionValue = NullOptional, Optional<TargetLatchEnum> latchValue = NullOptional,
-             Optional<Globals::ThreeLevelAutoEnum> speedValue = NullOptional)
+    void Set(Optional<DataModel::Nullable<chip::Percent100ths>> positionValue = NullOptional,
+             Optional<DataModel::Nullable<bool>> latchValue                   = NullOptional,
+             Optional<Globals::ThreeLevelAutoEnum> speedValue                 = NullOptional)
     {
         position = positionValue;
         latch    = latchValue;
         speed    = speedValue;
     }
 
-    bool operator==(const GenericTargetStruct & rhs) const
+    bool operator==(const GenericDimensionStateStruct & rhs) const
     {
         return position == rhs.position && latch == rhs.latch && speed == rhs.speed;
     }
 
-    bool operator!=(const GenericTargetStruct & rhs) const
+    bool operator!=(const GenericDimensionStateStruct & rhs) const
     {
         return position != rhs.position || latch != rhs.latch || speed != rhs.speed;
     }

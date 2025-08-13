@@ -43,7 +43,7 @@ class PrefixCppDocComment:
         self.value_len = len(token.value)  # includes /***/ AND whitespace
         self.value = token.value[3:-2].strip()
 
-    def appply_to_idl(self, idl: Idl, content: str):
+    def apply_to_idl(self, idl: Idl, content: str):
         if self.start_pos is None:
             return
 
@@ -201,10 +201,10 @@ class MatterIdlTransformer(Transformer):
             raise Exception("Unexpected size for data type")
 
     @v_args(inline=True)
-    def constant_entry(self, api_maturity, id, number):
+    def constant_entry(self, api_maturity, id, number, spec_name):
         if api_maturity is None:
             api_maturity = ApiMaturity.STABLE
-        return ConstantEntry(name=id, code=number, api_maturity=api_maturity)
+        return ConstantEntry(name=id, code=number, api_maturity=api_maturity, specification_name=spec_name)
 
     @v_args(inline=True)
     def enum(self, shared, id, type, *entries):
@@ -236,6 +236,9 @@ class MatterIdlTransformer(Transformer):
 
     def attr_readonly(self, _):
         return AttributeQuality.READABLE
+
+    def attr_writeonly(self, _):
+        return AttributeQuality.WRITABLE
 
     def attr_nosubscribe(self, _):
         return AttributeQuality.NOSUBSCRIBE
@@ -418,10 +421,8 @@ class MatterIdlTransformer(Transformer):
     def attribute(self, qualities, definition_tuple):
         (definition, acl) = definition_tuple
 
-        # until we support write only (and need a bit of a reshuffle)
-        # if the 'attr_readonly == READABLE' is not in the list, we make things
-        # read/write
-        if AttributeQuality.READABLE not in qualities:
+        # If the attribute is neither "readonly" nor "writeonly", then it must be Read/Write
+        if AttributeQuality.READABLE not in qualities and AttributeQuality.WRITABLE not in qualities:
             qualities |= AttributeQuality.READABLE
             qualities |= AttributeQuality.WRITABLE
 
@@ -691,7 +692,7 @@ class ParserWithLines:
         idl.clusters = [c for c in clusters.values()]
 
         for comment in self.transformer.doc_comments:
-            comment.appply_to_idl(idl, file)
+            comment.apply_to_idl(idl, file)
 
         if self.merge_globals:
             idl = _merge_global_types_into_clusters(idl)
