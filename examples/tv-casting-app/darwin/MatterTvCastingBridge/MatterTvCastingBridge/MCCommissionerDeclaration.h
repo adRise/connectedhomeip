@@ -82,6 +82,8 @@ typedef NS_ENUM(NSInteger, CdError) {
  * user has decided to exit the commissioning process.
  */
 @property (nonatomic, readonly) BOOL cancelPasscode;
+/** Feature: Commissioner-Generated Passcode - length of passcode displayed. */
+@property (nonatomic, readonly) NSInteger passcodeLength;
 
 - (instancetype)initWithOptions:(NSInteger)errorCode
                   needsPasscode:(BOOL)needsPasscode
@@ -89,7 +91,8 @@ typedef NS_ENUM(NSInteger, CdError) {
         passcodeDialogDisplayed:(BOOL)passcodeDialogDisplayed
            commissionerPasscode:(BOOL)commissionerPasscode
                 qRCodeDisplayed:(BOOL)qRCodeDisplayed
-                 cancelPasscode:(BOOL)cancelPasscode;
+                 cancelPasscode:(BOOL)cancelPasscode
+                 passcodeLength:(NSInteger)passcodeLength;
 
 /**
  * Function to return the error code as a string.

@@ -99,7 +99,9 @@ void PythonResubscribePolicy(uint32_t aNumCumulativeRetries, uint32_t & aNextSub
 class ReadClientCallback : public ReadClient::Callback
 {
 public:
-    ReadClientCallback(PyObject * appContext) : mBufferedReadCallback(*this), mAppContext(appContext) {}
+    ReadClientCallback(PyObject * appContext, bool allowLargePayload) :
+        mBufferedReadCallback(*this, allowLargePayload), mAppContext(appContext)
+    {}
 
     app::BufferedReadCallback * GetBufferedReadCallback() { return &mBufferedReadCallback; }
 
@@ -372,7 +374,7 @@ PyChipError pychip_WriteClient_WriteAttributes(void * appContext, DeviceProxy * 
 
         TLV::TLVReader reader;
         reader.Init(tlvBuffer, static_cast<uint32_t>(length));
-        reader.Next();
+        TEMPORARY_RETURN_IGNORED reader.Next();
         Optional<DataVersion> dataVersion;
         if (path.hasDataVersion == 1)
         {
@@ -431,7 +433,7 @@ PyChipError pychip_WriteClient_WriteGroupAttributes(size_t groupIdSizeT, chip::C
 
         TLV::TLVReader reader;
         reader.Init(tlvBuffer, static_cast<uint32_t>(length));
-        reader.Next();
+        TEMPORARY_RETURN_IGNORED reader.Next();
         Optional<DataVersion> dataVersion;
         if (path.hasDataVersion == 1)
         {
@@ -472,7 +474,8 @@ void pychip_ReadClient_ShutdownSubscription(ReadClient * apReadClient)
     FabricIndex fabricIndex = apReadClient->GetFabricIndex();
     NodeId nodeId           = apReadClient->GetPeerNodeId();
 
-    InteractionModelEngine::GetInstance()->ShutdownSubscription(ScopedNodeId(nodeId, fabricIndex), subscriptionId.Value());
+    TEMPORARY_RETURN_IGNORED InteractionModelEngine::GetInstance()->ShutdownSubscription(ScopedNodeId(nodeId, fabricIndex),
+                                                                                         subscriptionId.Value());
 }
 
 void pychip_ReadClient_OverrideLivenessTimeout(ReadClient * pReadClient, uint32_t livenessTimeoutMs)
@@ -514,14 +517,14 @@ void pychip_ReadClient_GetSubscriptionTimeoutMs(ReadClient * pReadClient, uint32
 PyChipError pychip_ReadClient_Read(void * appContext, ReadClient ** pReadClient, DeviceProxy * device, uint8_t * readParamsBuf,
                                    void ** attributePathsFromPython, size_t numAttributePaths, void ** dataversionFiltersFromPython,
                                    size_t numDataversionFilters, void ** eventPathsFromPython, size_t numEventPaths,
-                                   uint64_t * eventNumberFilter)
+                                   uint64_t * eventNumberFilter, bool allowLargePayload)
 {
     CHIP_ERROR err                 = CHIP_NO_ERROR;
     PyReadAttributeParams pyParams = {};
     // The readParamsBuf might be not aligned, using a memcpy to avoid some unexpected behaviors.
     memcpy(&pyParams, readParamsBuf, sizeof(pyParams));
 
-    auto callback           = std::make_unique<ReadClientCallback>(appContext);
+    auto callback           = std::make_unique<ReadClientCallback>(appContext, allowLargePayload);
     auto attributePaths     = std::make_unique<AttributePathParams[]>(numAttributePaths);
     auto dataVersionFilters = std::make_unique<chip::app::DataVersionFilter[]>(numDataversionFilters);
     auto eventPaths         = std::make_unique<EventPathParams[]>(numEventPaths);
