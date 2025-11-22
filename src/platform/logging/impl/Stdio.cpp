@@ -44,6 +44,7 @@ void LogV(const char * module, uint8_t category, const char * msg, va_list v)
     flockfile(stdout);
 #endif
 
+#if !defined(__APPLE__)
     switch (category)
     {
     case kLogCategory_Error:
@@ -56,6 +57,7 @@ void LogV(const char * module, uint8_t category, const char * msg, va_list v)
         printf("\033[0;34m");
         break;
     }
+#endif
 
 #if defined(__APPLE__) || defined(__gnu_linux__)
     timespec ts;
@@ -75,7 +77,11 @@ void LogV(const char * module, uint8_t category, const char * msg, va_list v)
 
     printf("[%s] ", module);
     vprintf(msg, v);
+#if !defined(__APPLE__)
     printf("\033[0m\n");
+#else
+    printf("\n");
+#endif
     fflush(stdout);
 
 #if defined(_POSIX_THREAD_SAFE_FUNCTIONS)
