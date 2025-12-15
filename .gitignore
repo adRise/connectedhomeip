@@ -44,6 +44,9 @@ TAGS
 # C-Lion / IDEA files
 .idea/**
 
+# Claude Code
+.claude
+
 # Python bytecodes
 __pycache__
 *.py[cod]
