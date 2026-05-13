@@ -46,6 +46,12 @@ jobs:
                     - ""
                     - "-minimal"
         steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+              with:
+                use-policy-store: true
+                api-key: ${{ secrets.STEP_SECURITY_API_KEY }}
+
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build & Push images using project bash script
@@ -79,6 +85,12 @@ jobs:
                 img:
                     - "-crosscompile"
         steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+              with:
+                use-policy-store: true
+                api-key: ${{ secrets.STEP_SECURITY_API_KEY }}
+
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build & Push images using project bash script
@@ -120,6 +132,12 @@ jobs:
                     - "-ti"
                     - "-tizen"
         steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+              with:
+                use-policy-store: true
+                api-key: ${{ secrets.STEP_SECURITY_API_KEY }}
+
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build & Push images using project bash script
@@ -146,6 +164,12 @@ jobs:
                     - "-esp32-qemu"
                     - "-tizen-qemu"
         steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+              with:
+                use-policy-store: true
+                api-key: ${{ secrets.STEP_SECURITY_API_KEY }}
+
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build & Push images using project bash script
@@ -169,6 +193,12 @@ jobs:
                 img:
                     - "-vscode"
         steps:
+            - name: Harden the runner
+              uses: step-security/harden-runner@a5ad31d6a139d249332a2605b85202e8c0b78450 # v2.19.1
+              with:
+                use-policy-store: true
+                api-key: ${{ secrets.STEP_SECURITY_API_KEY }}
+
             - name: Checkout
               uses: actions/checkout@v6
             - name: Build & Push images using project bash script
